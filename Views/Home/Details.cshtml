@@ -1,0 +1,73 @@
+@model TemplateViewModel
+
+@{
+    ViewData["Title"] = "下载模板";
+}
+
+<div class="card mb-2">
+    <div class="card-body">
+        <h5 class="card-title">
+            @Model.Project.Name
+            <span class='badge badge@(Model.Project.IsActive?"-success":"--secondary")'>
+                @(Model.Project.IsActive? "使用中": "已失效")
+            </span>
+            <a class="float-right btn btn-link" asp-action="Index">返回项目列表</a>
+        </h5>
+        <table class="table table-sm table-bordered small mb-0">
+            <tr>
+                <td>@Html.DisplayNameFor(m=>m.Project.ProjectItem)</td>
+                <td>@Html.DisplayFor(m=>m.Project.ProjectItem)</td>
+                <td>@Html.DisplayNameFor(m=>m.Project.ContractPart)</td>
+                <td>@Html.DisplayFor(m=>m.Project.ContractPart)</td>
+            </tr>
+            <tr>
+                <td>@Html.DisplayNameFor(m=>m.Project.ConstructionUnit)</td>
+                <td>@Html.DisplayFor(m=>m.Project.ConstructionUnit)</td>
+                <td>@Html.DisplayNameFor(m=>m.Project.Builder)</td>
+                <td>@Html.DisplayFor(m=>m.Project.Builder)</td>
+            </tr>
+            <tr>
+                <td>@Html.DisplayNameFor(m=>m.Project.Supervisor)</td>
+                <td>@Html.DisplayFor(m=>m.Project.Supervisor)</td>
+                <td>@Html.DisplayNameFor(m=>m.Project.CreatedOn)</td>
+                <td>@Html.DisplayFor(m=>m.Project.CreatedOn)</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="accordion" id="templatesArea">
+    @{
+        int i = 1;
+    }
+    @foreach (var category in Model.Categories)
+    {
+        var headingId = $"heading{i}";
+        var collapseId = $"collapse{i}";
+        var defaultShow = i==1? "show": "";
+        <div class="card">
+            <div class="card-header p-0" id="@headingId">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" 
+                        data-target="#@collapseId" aria-expanded="true" aria-controls="@collapseId">
+                        @category
+                    </button>
+                </h5>
+            </div>
+
+            <div id="@collapseId" class="collapse @defaultShow" aria-labelledby="@headingId" 
+                data-parent="#templatesArea">
+                <div class="card-body">
+                    @foreach (var file in Model.Files[category])
+                    {
+                        <div>
+                            @file
+                            <a class="btn btn-link ml-4" asp-action="Download" asp-route-id="@Model.Project.Id"
+                                asp-route-dir="@category" asp-route-file="@file">下载模板</a>
+                        </div>
+                    }                    
+                </div>
+            </div>
+        </div>
+        i++;
+    }
+</div>

@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Project>
+
+@{
+    ViewData["Title"] = "首页";
+}
+
+<div>
+    <a asp-action="Edit" class="btn btn-link">新建项目</a>
+    <a asp-action="Index" asp-route-flag="@ViewBag.Flag" class="float-right">
+        @if(!string.IsNullOrWhiteSpace(ViewBag.Flag)){
+            @: 隐藏无效项目（仅有效）
+        }else{
+            @: 显示全部项目（含无效）
+        }
+    </a>
+</div>
+
+@if(Model == null || Model.Count() == 0){
+    <div class="alert alert-warning">
+        没有项目，点击“新建项目”插入新项目
+    </div>
+}else{
+    <div class="alert alert-info">
+        <small>点击“新建项目”插入新项目，点击项目名称超级链接下载表格模板，点击
+            <img src="~/images/bootstrap-icons-1.0.0/pencil-square.svg">图标打开项目进行编辑
+        </small>
+    </div>
+    <table class="table table-sm table-bordered small">
+        <thead class="thead-dark">
+            <tr>
+                <th>@Html.DisplayNameFor(m=>m.First().Name)</th>
+                <th>@Html.DisplayNameFor(m=>m.First().ProjectItem)</th>
+                <th>@Html.DisplayNameFor(m=>m.First().ContractPart)</th>
+                <th>@Html.DisplayNameFor(m=>m.First().ConstructionUnit)</th>
+                <th>@Html.DisplayNameFor(m=>m.First().Builder)</th>
+                <th>@Html.DisplayNameFor(m=>m.First().Supervisor)</th>
+                <th>@Html.DisplayNameFor(m=>m.First().CreatedOn)</th>
+                <th>@Html.DisplayNameFor(m=>m.First().IsActive)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">
+                            <img title="编辑项目" src="~/images/bootstrap-icons-1.0.0/pencil-square.svg">
+                        </a>
+                        <a asp-action="Details" asp-route-id="@item.Id">
+                            @Html.DisplayFor(m=>item.Name)
+                        </a>
+                    </td>
+                    <td>@Html.DisplayFor(m=>item.ProjectItem)</td>
+                    <td>@Html.DisplayFor(m=>item.ContractPart)</td>
+                    <td>@Html.DisplayFor(m=>item.ConstructionUnit)</td>
+                    <td>@Html.DisplayFor(m=>item.Builder)</td>
+                    <td>@Html.DisplayFor(m=>item.Supervisor)</td>
+                    <td>@Html.DisplayFor(m=>item.CreatedOn)</td>
+                    <td>@Html.DisplayFor(m=>item.IsActive)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
