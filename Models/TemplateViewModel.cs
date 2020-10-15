@@ -18,7 +18,7 @@ namespace RoadProject.Models
             var model = new TemplateViewModel{Project = project};
             var q = from d in Directory.GetDirectories("Templates")
                     orderby d
-                    select d.Split('/').LastOrDefault();
+                    select d.Split(new char[]{'/', '\\'}).LastOrDefault();
             model.Categories = new List<string>(q.ToArray());
             model.Files = new Dictionary<string, IEnumerable<string>>();
             foreach(var dir in model.Categories)
@@ -26,7 +26,7 @@ namespace RoadProject.Models
                 string path = $"Templates/{dir}";
                 q = from f in Directory.GetFiles(path)
                     orderby f
-                    select f.Split('/').LastOrDefault();
+                    select f.Split(new char[]{'/', '\\'}).LastOrDefault();
                 var files = new List<string>(q.ToArray());
                 model.Files.Add(dir, files);
             }
